@@ -1,0 +1,194 @@
+/* Animations */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fade-in-out {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.animate-fade-in-out {
+    animation: fade-in-out 3s ease-in-out forwards;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(75, 85, 99, 0.5);
+}
+
+/* Code Block Styles */
+pre code {
+    font-family: 'Fira Code', monospace;
+    tab-size: 4;
+}
+
+/* Parameter Slider Custom Styles */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #e5e7eb;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.dark input[type="range"] {
+    background: #374151;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #0ea5e9;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: #0284c7;
+    transform: scale(1.1);
+    box-shadow: 0 0 0 6px rgba(14, 165, 233, 0.2);
+}
+
+.dark input[type="range"]::-webkit-slider-thumb {
+    background: #38bdf8;
+}
+
+.dark input[type="range"]::-webkit-slider-thumb:hover {
+    background: #7dd3fc;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    border-color: #0ea5e9;
+    border-right-color: transparent;
+}
+
+.dark .loading-spinner {
+    border-color: #38bdf8;
+    border-right-color: transparent;
+}
+
+/* Message Bubbles */
+.message-bubble {
+    position: relative;
+    transition: all 0.2s ease-in-out;
+}
+
+.message-bubble::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    border: 8px solid transparent;
+}
+
+.message-bubble.user::before {
+    right: -16px;
+    border-left-color: #0ea5e9;
+}
+
+.message-bubble.assistant::before {
+    left: -16px;
+    border-right-color: #ffffff;
+}
+
+.dark .message-bubble.assistant::before {
+    border-right-color: #1f2937;
+}
+
+/* Token Counter */
+.token-counter {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Keyboard Shortcuts */
+kbd {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
+}
+
+.dark kbd {
+    background-color: #374151;
+    border-color: #4b5563;
+}
+
+/* Focus Ring */
+.focus-ring:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0ea5e9;
+}
+
+.dark .focus-ring:focus-visible {
+    box-shadow: 0 0 0 2px #1f2937, 0 0 0 4px #38bdf8;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 640px) {
+    .mobile-hidden {
+        display: none;
+    }
+
+    .mobile-stack {
+        flex-direction: column;
+    }
+
+    .mobile-full-width {
+        width: 100%;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    .print-break-inside-avoid {
+        break-inside: avoid;
+    }
+}
+
+/* Glassmorphism Effects */
+.glass-effect {
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Transitions */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
