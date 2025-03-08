@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Console</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/svgs/solid/robot.svg">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fira Code for code blocks -->
+    <link href="https://cdn.jsdelivr.net/npm/fira-code@6.2.0/distr/fira_code.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen">
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 right-4 z-50"></div>
+
+    <div class="flex flex-col h-screen">
+        <!-- Navbar -->
+        <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-primary-500/10 dark:bg-primary-500/20">
+                            <i class="fas fa-robot text-primary-500 text-2xl"></i>
+                        </div>
+                        <h1 class="text-xl font-semibold bg-gradient-to-r from-primary-600 to-primary-400 dark:from-primary-400 dark:to-primary-300 bg-clip-text text-transparent">
+                            Gemini Console
+                        </h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button 
+                            id="themeToggle" 
+                            class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 focus-ring"
+                            aria-label="Toggle theme"
+                        >
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex overflow-hidden">
+            <!-- Left Sidebar -->
+            <div class="w-72 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg rounded-r-2xl">
+                <!-- API Key Section -->
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                        <i class="fas fa-key text-primary-500 mr-2"></i>
+                        API Key
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="relative group">
+                            <input 
+                                type="password" 
+                                id="apiKey" 
+                                class="relative w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm transition-all duration-200 focus-ring z-10" 
+                                placeholder="Enter your API Key"
+                                aria-label="API Key input"
+                                autocomplete="off"
+                            >
+                            <div class="absolute inset-0 bg-primary-500/10 dark:bg-primary-500/20 rounded-xl transition-all duration-200 group-hover:bg-primary-500/20 dark:group-hover:bg-primary-500/30 group-focus-within:bg-primary-500/20 dark:group-focus-within:bg-primary-500/30 -z-10"></div>
+                            <button 
+                                id="toggleApiKey" 
+                                class="absolute right-16 top-2 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 z-20"
+                                aria-label="Toggle API key visibility"
+                            >
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button 
+                                id="saveApiKey" 
+                                class="absolute right-2 top-2 p-1 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 z-20"
+                                aria-label="Save API key"
+                            >
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                            <i class="fas fa-shield-alt text-primary-500 mr-1.5"></i>
+                            Your API key is stored locally and never sent to our servers
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Selection -->
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                        <i class="fas fa-microchip text-primary-500 mr-2"></i>
+                        Model Selection
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="relative group">
+                            <select 
+                                id="modelSelect" 
+                                class="relative w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm transition-all duration-200 focus-ring appearance-none z-10"
+                                aria-label="Select Gemini model"
+                            >
+                                <option value="">Select a model</option>
+                            </select>
+                            <div class="absolute inset-0 bg-primary-500/10 dark:bg-primary-500/20 rounded-xl transition-all duration-200 group-hover:bg-primary-500/20 dark:group-hover:bg-primary-500/30 group-focus-within:bg-primary-500/20 dark:group-focus-within:bg-primary-500/30 -z-10"></div>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                <i class="fas fa-chevron-down text-gray-400"></i>
+                            </div>
+                        </div>
+                        <div id="modelDescription" class="text-xs text-gray-600 dark:text-gray-400 italic flex items-start">
+                            <i class="fas fa-info-circle text-primary-500 mr-1.5 mt-0.5"></i>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parameters -->
+                <div class="p-6">
+                    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex items-center">
+                        <i class="fas fa-sliders-h text-primary-500 mr-2"></i>
+                        Parameters
+                    </h2>
+                    
+                    <!-- Temperature -->
+                    <div class="mb-6">
+                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-2 flex items-center">
+                            <i class="fas fa-thermometer-half text-primary-500 mr-1.5"></i>
+                            Temperature
+                        </label>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="1" 
+                            step="0.1" 
+                            value="0.7" 
+                            class="w-full" 
+                            id="temperature"
+                        >
+                        <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+                            <span>0</span>
+                            <span id="temperatureValue">0.7</span>
+                            <span>1</span>
+                        </div>
+                    </div>
+
+                    <!-- Max Tokens -->
+                    <div class="mb-6">
+                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-2 flex items-center">
+                            <i class="fas fa-text-width text-primary-500 mr-1.5"></i>
+                            Max Tokens
+                        </label>
+                        <div class="relative group">
+                            <input 
+                                type="number" 
+                                min="1" 
+                                max="2048" 
+                                value="256" 
+                                class="relative w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white text-sm transition-all duration-200 focus-ring z-10" 
+                                id="maxTokens"
+                            >
+                            <div class="absolute inset-0 bg-primary-500/10 dark:bg-primary-500/20 rounded-xl transition-all duration-200 group-hover:bg-primary-500/20 dark:group-hover:bg-primary-500/30 group-focus-within:bg-primary-500/20 dark:group-focus-within:bg-primary-500/30 -z-10"></div>
+                        </div>
+                    </div>
+
+                    <!-- Top P -->
+                    <div class="mb-6">
+                        <label class="block text-xs text-gray-600 dark:text-gray-400 mb-2 flex items-center">
+                            <i class="fas fa-percentage text-primary-500 mr-1.5"></i>
+                            Top P
+                        </label>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="1" 
+                            step="0.1" 
+                            value="0.9" 
+                            class="w-full" 
+                            id="topP"
+                        >
+                        <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+                            <span>0</span>
+                            <span id="topPValue">0.9</span>
+                            <span>1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversation History Sidebar -->
+            <div class="w-72 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg rounded-l-2xl flex flex-col">
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                        <i class="fas fa-history text-primary-500 mr-2"></i>
+                        Conversation History
+                    </h2>
+                    <button 
+                        id="clearHistory" 
+                        class="w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-200 focus-ring flex items-center justify-center space-x-2"
+                        aria-label="Clear conversation history"
+                    >
+                        <i class="fas fa-trash-alt"></i>
+                        <span>Clear All</span>
+                    </button>
+                </div>
+                <div id="conversationHistory" class="flex-1 overflow-y-auto custom-scrollbar p-4">
+                    <!-- Conversation history items will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="flex-1 flex flex-col bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+                <!-- Model Info Banner -->
+                <div id="modelInfo" class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-sm border-b border-gray-200 dark:border-gray-700 p-4 hidden">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary-500/10 dark:bg-primary-500/20">
+                                <i class="fas fa-microchip text-primary-500"></i>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Current Model:</span>
+                                <span id="currentModel" class="text-sm font-semibold text-primary-600 dark:text-primary-400"></span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-6">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-thermometer-half text-primary-500"></i>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">
+                                    Temperature: <span id="currentTemp" class="font-medium">0.7</span>
+                                </span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-text-width text-primary-500"></i>
+                                <span class="text-sm text-gray-600 dark:text-gray-400">
+                                    Max Tokens: <span id="currentMaxTokens" class="font-medium">256</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chat Messages -->
+                <div class="flex-1 overflow-y-auto custom-scrollbar p-6" id="chatMessages">
+                    <!-- Messages will be inserted here -->
+                </div>
+
+                <!-- Input Area -->
+                <div class="border-t border-gray-200 dark:border-gray-700 p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                    <div class="flex flex-col space-y-4">
+                        <div class="flex space-x-4">
+                            <div class="flex-1 relative group">
+                                <textarea 
+                                    id="userInput" 
+                                    class="relative w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary-500 dark:text-white resize-none transition-all duration-200 focus-ring z-10"
+                                    rows="3" 
+                                    placeholder="Type your message..."
+                                    aria-label="Message input"
+                                    data-gramm="false"
+                                ></textarea>
+                                <div class="absolute inset-0 bg-primary-500/10 dark:bg-primary-500/20 rounded-xl transition-all duration-200 group-hover:bg-primary-500/20 dark:group-hover:bg-primary-500/30 group-focus-within:bg-primary-500/20 dark:group-focus-within:bg-primary-500/30 -z-10"></div>
+                            </div>
+                            <button 
+                                id="sendMessage" 
+                                class="px-6 py-3 bg-primary-500 text-white rounded-xl hover:bg-primary-600 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 focus-ring flex items-center space-x-2 self-end"
+                                aria-label="Send message"
+                            >
+                                <i class="fas fa-paper-plane"></i>
+                                <span>Send</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-1">
+                                    <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg font-medium">Enter</kbd>
+                                    <span>to send</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <kbd class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg font-medium">Shift + Enter</kbd>
+                                    <span>for new line</span>
+                                </div>
+                            </div>
+                            <div id="tokenCount" class="hidden flex items-center space-x-2">
+                                <i class="fas fa-calculator text-primary-500"></i>
+                                <span>Tokens: <span id="currentTokenCount" class="font-medium">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
